@@ -1,0 +1,28 @@
+{
+  "name": "exauth",
+  "version": "1.0.0",
+  "description": "Extream Authentication server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Extream-SaaS/ex-auth.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Extream-SaaS/ex-auth/issues"
+  },
+  "homepage": "https://github.com/Extream-SaaS/ex-auth#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "node-oauth2-server": "^2.4.0",
+    "pg": "^8.3.0"
+  }
+}
