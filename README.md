@@ -81,7 +81,7 @@ POST `/auth/register`
 ```JSON
 {
   "status": 409,
-  "message": "username exists"
+  "message": "user exists"
 }
 ```
 

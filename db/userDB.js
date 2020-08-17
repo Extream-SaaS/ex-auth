@@ -12,16 +12,21 @@ module.exports = (injectedPgPool) => {
 };
 
 async function register(username, password, userType, userFields, cbFunc) {
-    const encPass = await bcrypt.hash(password, 10);
-    const fields = JSON.parse(userFields);
+    try {
+        const encPass = await bcrypt.hash(password, 10);
+        const fields = JSON.parse(userFields);
 
-    const query = `INSERT INTO users (username, user_password, user_type, fields) VALUES ('${username}', '${encPass}', '${userType}', '${JSON.stringify(fields)}')`;
+        const query = `INSERT INTO users (username, user_password, user_type, fields) VALUES ('${username}', '${encPass}', '${userType}', '${JSON.stringify(fields)}') RETURNING *`;
 
-    pgPool.query(query, cbFunc);
+        return pgPool.query(query, cbFunc);
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
 }
 
 function getUser(username, password, cbFunc) {
-    const getUserQuery = `SELECT public_id, username, user_password, fields FROM users WHERE username = '${username}' AND event_id = '${event_id}'`;
+    const getUserQuery = `SELECT * FROM users WHERE username = '${username}'`;
 
     pgPool.query(getUserQuery, async (response) => {
         let found = false;

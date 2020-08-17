@@ -11,20 +11,21 @@ module.exports = (injectedUserDB) => {
 
 function registerUser(req, res) {
     userDB.isValidUser(req.body.username, (error, isValidUser) => {
-        if (error || !isValidUser) {
-            const message = error ?
-              "Something went wrong!"
-              : "This user already exists!";
+        if (!isValidUser) {
+            sendResponse(res, { message: 'user exists' }, 409);
+            return;
+        }
 
-            sendResponse(res, message, error);
-
+        if (error) {
+            sendResponse(res, { message: 'bad request' }, 400, error);
             return;
         }
 
         userDB.register(req.body.username, req.body.password, req.body.user_type, req.body.user, (response) => {
             sendResponse(
                 res,
-                response.error === undefined ? "Success!!" : "Something went wrong!",
+                response.error === undefined ? { response } : { message: 'bad request'},
+                response.error === undefined ? 200 : 400,
                 response.error
             );
         });
@@ -33,9 +34,9 @@ function registerUser(req, res) {
 
 function login(query, res) {}
 
-function sendResponse(res, message, error) {
-    res.status(error !== undefined ? 400 : 200).json({
-        message: message,
-        error: error,
+function sendResponse(res, data, status=200, error=null) {
+    res.status(status).json({
+        ...data,
+        error,
     });
 }
