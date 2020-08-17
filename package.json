@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Extream Authentication server",
   "main": "index.js",
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "start": "node index",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,6 +22,7 @@
   },
   "homepage": "https://github.com/Extream-SaaS/ex-auth#readme",
   "dependencies": {
+    "@google-cloud/debug-agent": "^5.1.2",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",

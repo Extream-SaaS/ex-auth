@@ -4,13 +4,14 @@ module.exports = {
 
 const Pool = require("pg").Pool;
 
+const dbSocketPath = process.env.DB_SOCKET_PATH || "/cloudsql";
+
 function query(queryString, cbFunc) {
   const pool = new Pool({
-      user: "postgres",
-      host: "35.246.19.80",
-      database: "ex-manage",
-      password: "4cDzu3f1K1qjq1zp4cDzu3f1K1qjq1zp",
-      port: 5432,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
+      host: `${dbSocketPath}/${process.env.INSTANCE_CONNECTION_NAME}`
   });
 
   pool.query(queryString, (error, results) => {

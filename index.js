@@ -3,6 +3,8 @@ const pgPool = require("./db/pgWrapper");
 const tokenDB = require("./db/tokenDB")(pgPool);
 const userDB = require("./db/userDB")(pgPool);
 
+require('@google-cloud/debug-agent').start({serviceContext: {enableCanary: false}});
+
 // OAuth imports
 const oAuthService = require("./auth/tokenService")(userDB, tokenDB);
 const oAuth2Server = require("node-oauth2-server");
@@ -29,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(app.oauth.errorHandler());
 app.use("/auth", routes);
 
-const port = 8888;
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
