@@ -1,4 +1,5 @@
 // Database imports
+require('dotenv').config();
 const pgPool = require("./db/pgWrapper");
 const tokenDB = require("./db/tokenDB")(pgPool);
 const userDB = require("./db/userDB")(pgPool);
@@ -11,7 +12,11 @@ const oAuth2Server = require("node-oauth2-server");
 
 // Express
 const express = require("express");
+const cors = require("cors");
 const app = express();
+app.use(cors({
+    origin: '*'
+}));
 app.oauth = oAuth2Server({
     model: oAuthService,
     grants: ["password"],

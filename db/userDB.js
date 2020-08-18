@@ -30,7 +30,7 @@ function getUser(username, password, cbFunc) {
 
     pgPool.query(getUserQuery, async (response) => {
         let found = false;
-        if (response.results.rowCount === 1) {
+        if (response.results && response.results.rowCount === 1) {
             const matched = await bcrypt.compare(password, response.results.rows[0].user_password);
             if (matched) {
                 found = true;
