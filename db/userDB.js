@@ -37,7 +37,7 @@ function getUser(username, password, cbFunc) {
             }
         }
         cbFunc(
-            false,
+            response.error,
             response.results && response.results.rowCount === 1 && found ?
               response.results.rows[0]
               : null

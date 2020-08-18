@@ -11,13 +11,13 @@ module.exports = (injectedUserDB) => {
 
 function registerUser(req, res) {
     userDB.isValidUser(req.body.username, (error, isValidUser) => {
-        if (!isValidUser) {
-            sendResponse(res, { message: 'user exists' }, 409);
+        if (error) {
+            sendResponse(res, { message: 'bad request' }, 400, error);
             return;
         }
 
-        if (error) {
-            sendResponse(res, { message: 'bad request' }, 400, error);
+        if (!isValidUser) {
+            sendResponse(res, { message: 'user exists' }, 409);
             return;
         }
 

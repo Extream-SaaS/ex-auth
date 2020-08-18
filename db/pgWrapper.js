@@ -8,10 +8,10 @@ const dbSocketPath = process.env.DB_SOCKET_PATH || "/cloudsql";
 
 function query(queryString, cbFunc) {
   const pool = new Pool({
-      user: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
-      host: `${dbSocketPath}/${process.env.INSTANCE_CONNECTION_NAME}`
+      user: process.env.CLOUD_SQL_USERNAME,
+      password: process.env.CLOUD_SQL_PASSWORD,
+      database: process.env.CLOUD_SQL_DATABASE,
+      host: `${dbSocketPath}/${process.env.CLOUD_SQL_INSTANCE}`
   });
 
   pool.query(queryString, (error, results) => {

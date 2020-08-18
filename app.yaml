@@ -3,10 +3,10 @@ runtime: nodejs
 env: flex
 
 beta_settings:
-  cloud_sql_instances: stoked-reality-284921:europe-west2:extream
+  cloud_sql_instances: "stoked-reality-284921:europe-west2:extream"
 
 env_variables:
-  DB_USER: "postgres"
-  DB_NAME: "ex-manage"
-  DB_PASS: "4cDzu3f1K1qjq1zp4cDzu3f1K1qjq1zp"
-  INSTANCE_CONNECTION_NAME: stoked-reality-284921:europe-west2:extream
+  CLOUD_SQL_USERNAME: "postgres"
+  CLOUD_SQL_DATABASE: "ex-manage"
+  CLOUD_SQL_PASSWORD: "4cDzu3f1K1qjq1zp4cDzu3f1K1qjq1zp"
+  CLOUD_SQL_INSTANCE: "stoked-reality-284921:europe-west2:extream"
