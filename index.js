@@ -24,7 +24,7 @@ app.oauth = oAuth2Server({
 });
 
 // Auth and routes
-const authenticator = require("./auth/authenticator")(userDB);
+const authenticator = require("./auth/authenticator")(userDB, tokenDB);
 const routes = require("./auth/routes")(
     express.Router(),
     app,

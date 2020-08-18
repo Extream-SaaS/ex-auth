@@ -7,6 +7,7 @@ module.exports = (injectedPgPool) => {
     return {
         register: register,
         getUser: getUser,
+        getUserByID: getUserByID,
         isValidUser: isValidUser,
     };
 };
@@ -43,6 +44,11 @@ function getUser(username, password, cbFunc) {
               : null
         );
     });
+}
+
+function getUserByID(id, cbFunc) {
+    const query = `SELECT * FROM users WHERE id = ${id}`;
+    return pgPool.query(query, cbFunc);
 }
 
 function isValidUser(username, cbFunc) {

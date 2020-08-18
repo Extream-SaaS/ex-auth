@@ -1,11 +1,13 @@
-let userDB;
+let userDB, tokenDB;
 
-module.exports = (injectedUserDB) => {
+module.exports = (injectedUserDB, injectedTokenDB) => {
     userDB = injectedUserDB;
+    tokenDB = injectedTokenDB;
 
     return {
         registerUser: registerUser,
         login: login,
+        getUser: getUser,
     };
 };
 
@@ -32,9 +34,24 @@ function registerUser(req, res) {
     });
 }
 
+function getUser(req, res) {
+    const bearerToken = req.headers.authorization.split('Bearer ')[1];
+    tokenDB.getUserIDFromBearerToken(bearerToken, (userID) => {
+        userDB.getUserByID(userID, (response) => {
+            const { public_id, username, fields } = response.results.rows[0];
+            sendResponse(
+                res,
+                response.error === undefined ? { id: public_id, username, fields } : { message: 'not authorized' },
+                response.error === undefined ? 200 : 401,
+                response.error
+            );
+        });
+    });
+}
+
 function login(query, res) {}
 
-function sendResponse(res, data, status=200, error=null) {
+function sendResponse(res, data, status=200, error=undefined) {
     res.status(status).json({
         ...data,
         error,
