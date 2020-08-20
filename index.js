@@ -1,5 +1,7 @@
 // Database imports
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 const pgPool = require("./db/pgWrapper");
 const tokenDB = require("./db/tokenDB")(pgPool);
 const userDB = require("./db/userDB")(pgPool);
