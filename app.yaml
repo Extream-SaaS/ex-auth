@@ -7,6 +7,6 @@ beta_settings:
 
 env_variables:
   CLOUD_SQL_USERNAME: "postgres"
-  CLOUD_SQL_DATABASE: "ex-manage"
+  CLOUD_SQL_DATABASE: "ex-auth"
   CLOUD_SQL_PASSWORD: "4cDzu3f1K1qjq1zp4cDzu3f1K1qjq1zp"
   CLOUD_SQL_INSTANCE: "stoked-reality-284921:europe-west2:extream"
