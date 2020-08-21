@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(app.oauth.errorHandler());
 app.use("/auth", routes);
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8881;
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
