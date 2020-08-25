@@ -34,6 +34,7 @@ class Routes {
   assignRoutes() {
     this.router.post('/register', userController.registerUser);
     this.router.post('/login', authController.login);
+    this.router.post('/login/passwordless', userController.passwordLessLink);
   }
 }
 

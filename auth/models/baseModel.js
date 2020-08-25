@@ -14,7 +14,7 @@ class BaseModel {
         if (!user) {
             return Promise.resolve(null);
         }
-        if (!await bcrypt.compare(password, user.user_password)) {
+        if (!await bcrypt.compare(password, user.password)) {
             return Promise.resolve(null);
         }
         return Promise.resolve(user);

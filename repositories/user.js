@@ -1,10 +1,11 @@
 const User = require('../db/models/user');
 
 class UserRepository {
-    static create(username, user_password, user_type, fields, clientId) {
+    static create(username, email, password, user_type, fields, clientId) {
         const properties = {
             username,
-            user_password,
+            email,
+            password,
             user_type,
             fields: JSON.parse(fields),
             clientId,
@@ -21,6 +22,10 @@ class UserRepository {
                 }
             }
         );
+    }
+
+    static updateByInstance(user) {
+        return user.save();
     }
 }
 

@@ -18,8 +18,14 @@ class User extends Model {
                 username: {
                     type: DataTypes.STRING,
                 },
-                user_password: {
+                email: {
                     type: DataTypes.STRING,
+                },
+                password: {
+                    type: DataTypes.STRING,
+                },
+                passwordExpiry: {
+                    type: DataTypes.DATE,
                 },
                 fields: {
                     type: DataTypes.JSON,
