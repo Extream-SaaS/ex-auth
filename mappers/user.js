@@ -7,6 +7,14 @@ class UserMapper {
             fields: user.fields,
         };
     }
+
+    static getLoginDataResponse(user) {
+        return {
+            username: user.username,
+            password: user.password,
+            user_type: user.user_type,
+        };
+    }
 }
 
 module.exports = UserMapper;
