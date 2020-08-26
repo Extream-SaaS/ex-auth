@@ -5,7 +5,7 @@ class BaseModel {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
         this.authClientRepository = authClientRepository;
-        this.clientId = 1;
+        this.clientId = clientId;
     }
 
     async getUser(username, password) {

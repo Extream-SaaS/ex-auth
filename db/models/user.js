@@ -33,6 +33,9 @@ class User extends Model {
                 user_type: {
                     type: DataTypes.STRING,
                 },
+                status: {
+                    type: DataTypes.STRING,
+                }
             },
             {
                 sequelize: sequelize,

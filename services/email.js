@@ -39,8 +39,14 @@ class EmailService {
         }
     }
 
-    async sendInviteeSignUp() {
-        return this.send('rich@extream.app', 'test', 'test email');
+    async sendInviteeSignUp(to, userPublicId, itemName) {
+        const link = `http://somegreatfrontend.com/register?id=${userPublicId}`;
+        const templateId = process.env.SENDGRID_INVITEE_TEMPLATE_ID;
+        const templateData = {
+            itemName: itemName,
+            link: link,
+        };
+        return this.send(to, templateId, templateData);
     }
 
     async sendPasswordlessLoginLink(to, username, firstName, lastName, password) {

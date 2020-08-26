@@ -1,4 +1,5 @@
 const AuthClient = require('../db/models/authClient');
+const Token = require('../db/models/token');
 
 class AuthClientRepository {
     // static create(accessToken, userId) {
@@ -31,6 +32,22 @@ class AuthClientRepository {
                     id: split[0],
                     secret: split[1],
                 },
+            }
+        );
+    }
+
+    static getByBearerAuthHeader(bearerAuthHeader) {
+        const bearerAuthToken = bearerAuthHeader.slice(7);
+        return AuthClient.findOne(
+            {
+                include: [
+                    {
+                        model: Token,
+                        where: {
+                            accessToken: bearerAuthToken,
+                        }
+                    }
+                ]
             }
         );
     }

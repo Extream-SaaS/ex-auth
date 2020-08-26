@@ -5,11 +5,10 @@ const {database} = require('./db/config/database');
 
 // Express
 const express = require("express");
-const cors = require("cors");
 const app = express();
-app.use(cors({
-    origin: '*'
-}));
+// app.use(cors({
+//     origin: '*'
+// }));
 
 const bodyParser = require("body-parser");
 
