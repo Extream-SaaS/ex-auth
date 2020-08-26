@@ -18,24 +18,18 @@ class UserController {
     }
 
     async registerUser(req, res) {
-        // await emailService.sendTest();
-        // return sendResponse(res, undefined, 200);
         try {
-            const authClient = await this.authClientRepository.getByBasicAuthHeader(req.headers.authorization);
-            if (!authClient) {
-                return sendResponse(res, {message: 'unauthorized'}, 401);
-            }
-            const existingUser = await this.userRespository.getByUsername(req.body.username, authClient.clientId);
+            const existingUser = await this.userRespository.getByUsername(req.body.username, req.authClient.clientId);
             if (existingUser) {
                 return sendResponse(res, {message: 'user exists'}, 409);
             }
 
             const hashed = await bcrypt.hash(req.body.password, 10);
-            const newUser = await this.userRespository.create(req.body.username, req.body.email, hashed, null, req.body.user_type, req.body.user, authClient.clientId, 'active');
+            const newUser = await this.userRespository.create(req.body.username, req.body.email, hashed, null, req.body.user_type, req.body.user, req.authClient.clientId, 'active');
             if (!newUser) {
                 return sendResponse(res, {message: 'bad request'}, 400);
             }
-            return sendResponse(res);
+            return sendResponse(res, UserMapper.toResponse(newUser));
         } catch (e) {
             console.log('error', e);
             return sendResponse(res, undefined, 500, e);
@@ -44,16 +38,12 @@ class UserController {
 
     async inviteUser(req, res) {
         try {
-            const authClient = await this.authClientRepository.getByBearerAuthHeader(req.headers.authorization);
-            if (!authClient) {
-                return sendResponse(res, {message: 'unauthorized'}, 401);
-            }
-            const existingUser = await this.userRespository.getByUsername(req.body.username, authClient.clientId);
+            const existingUser = await this.userRespository.getByUsername(req.body.username, req.authClient.clientId);
             if (existingUser) {
                 return sendResponse(res, {message: 'user exists'}, 409);
             }
 
-            const newUser = await this.userRespository.create(req.body.username, req.body.email, undefined, null, req.body.user_type, req.body.user, authClient.clientId, 'invited');
+            const newUser = await this.userRespository.create(req.body.username, req.body.email, undefined, null, req.body.user_type, req.body.user, req.authClient.clientId, 'invited');
             if (!newUser) {
                 return sendResponse(res, {message: 'bad request'}, 400);
             }
@@ -67,12 +57,7 @@ class UserController {
 
     async getInvitee(req, res) {
         try {
-            const authClient = await this.authClientRepository.getByBasicAuthHeader(req.headers.authorization);
-            if (!authClient) {
-                return sendResponse(res, {message: 'unauthorized'}, 401);
-            }
-
-            const user = await this.userRespository.getByPublicId(req.params.public_id, authClient.clientId);
+            const user = await this.userRespository.getByPublicId(req.params.public_id, req.authClient.clientId);
             if (!user) {
                 return sendResponse(res, {message: 'invitee not found'}, 404);
             }
@@ -85,11 +70,7 @@ class UserController {
 
     async completeInviteeRegistration(req, res) {
         try {
-            const authClient = await this.authClientRepository.getByBasicAuthHeader(req.headers.authorization);
-            if (!authClient) {
-                return sendResponse(res, {message: 'unauthorized'}, 401);
-            }
-            const user = await this.userRespository.getByPublicId(req.params.public_id, authClient.clientId);
+            const user = await this.userRespository.getByPublicId(req.params.public_id, req.authClient.clientId);
             if (!user) {
                 return sendResponse(res, {message: 'invitee not found'}, 404);
             }
@@ -114,11 +95,7 @@ class UserController {
 
     async passwordLessLink(req, res) {
         try {
-            const authClient = await this.authClientRepository.getByBasicAuthHeader(req.headers.authorization);
-            if (!authClient) {
-                return sendResponse(res, {message: 'unauthorized'}, 401);
-            }
-            const user = await this.userRespository.getByUsername(req.body.username, authClient.clientId);
+            const user = await this.userRespository.getByUsername(req.body.username, req.authClient.clientId);
             if (!user) {
                 return sendResponse(res, {message: 'user not found'}, 404);
             }

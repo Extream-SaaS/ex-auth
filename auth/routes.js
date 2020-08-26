@@ -28,7 +28,7 @@ class Routes {
             authClient = await authClientRepository.getByBearerAuthHeader(req.headers.authorization);
         }
         if (!authClient) {
-            return sendResponse(res, undefined, 401);
+            return sendResponse(res, {message: 'unauthorized'}, 401);
         }
         req.authClient = authClient;
         next();
@@ -36,21 +36,8 @@ class Routes {
 
     async setOauth(req, res, next) {
         try {
-            if (!req.headers.authorization) {
-                return sendResponse(res, undefined, 401);
-            }
-            let authClient;
-            if (req.headers.authorization.slice(0, 5) === 'Basic') {
-                authClient = await authClientRepository.getByBasicAuthHeader(req.headers.authorization);
-            } else if (req.headers.authorization.slice(0, 6) === 'Bearer') {
-                authClient = await authClientRepository.getByBearerAuthHeader(req.headers.authorization);
-            }
-            if (!authClient) {
-                return sendResponse(res, undefined, 401);
-            }
-
             // can add a call to a factory class/function here if using separate auth models for separate clients
-            const model = new BaseModel(authClient.clientId, userRepository, tokenRepository, authClientRepository);
+            const model = new BaseModel(req.authClient.clientId, userRepository, tokenRepository, authClientRepository);
             req.oauth = new OAuth2Server({
                 model: model,
                 accessTokenLifetime: 86400,
