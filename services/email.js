@@ -39,12 +39,21 @@ class EmailService {
         }
     }
 
+    async sendClientCreate(to, clientId, clientName) {
+        const templateId = process.env.SENDGRID_CLIENT_SIGNUP_TEMPLATE_ID;
+        const templateData = {
+            clientId,
+            clientName,
+        };
+        return this.send(to, templateId, templateData);
+    }
+
     async sendInviteeSignUp(to, userPublicId, itemName) {
         const link = `http://somegreatfrontend.com/register?id=${userPublicId}`;
         const templateId = process.env.SENDGRID_INVITEE_TEMPLATE_ID;
         const templateData = {
-            itemName: itemName,
-            link: link,
+            itemName,
+            link,
         };
         return this.send(to, templateId, templateData);
     }
@@ -60,8 +69,8 @@ class EmailService {
         const link = `http://somegreatfrontend.com?username=${username}&token=${password}`;
         const templateId = process.env.SENDGRID_PASSWORDLESS_LOGIN_LINK_TEMPLATE_ID;
         const templateData = {
-            greeting: greeting,
-            link: link
+            greeting,
+            link
         };
         return this.send(to, templateId, templateData);
     }

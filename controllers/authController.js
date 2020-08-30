@@ -39,11 +39,13 @@ class AuthController {
             if (user.status !== 'active') {
                 return sendResponse(res, undefined, 400, 'user is not activated');
             }
-            if (user.user_type === 'attendee') {
-                const password = await crypto.randomBytes(32).toString('hex');
+            if (user.user_type === 'attendee' || user.user_type === 'audience') {
+                const password = crypto.randomBytes(32).toString('hex');
                 user.password = await bcrypt.hash(password, 10);
                 user.passwordExpiry = moment().add(30, 'minutes').toDate();
                 await this.userRespository.updateByInstance(user);
+                // return the non-hashed password here
+                user.password = password;
                 return sendResponse(res, UserMapper.getLoginDataResponse(user));
             } else if (user.user_type === 'moderator') {
                 return sendResponse(res, UserMapper.getLoginDataResponse({username: user.username, user_type: user.user_type}));

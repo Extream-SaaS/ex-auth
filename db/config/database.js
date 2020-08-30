@@ -9,12 +9,26 @@ const AuthClient = require('../models/authClient');
 // import {User} from "../models/user";
 // import {Token} from "../models/token";
 
-const username = process.env.DB_USERNAME;
-const password = process.env.DB_PASSWORD;
-const name = process.env.DB_NAME;
-const host = process.env.DB_HOST;
+const username = process.env.DB_USERNAME || process.env.CLOUD_SQL_USERNAME;
+const password = process.env.DB_PASSWORD || process.env.CLOUD_SQL_PASSWORD;
+const name = process.env.DB_NAME || process.env.CLOUD_SQL_DATABASE;
+const dbSocketPath = process.env.DB_SOCKET_PATH || "/cloudsql";
+const host = process.env.DB_HOST || `${dbSocketPath}/${process.env.CLOUD_SQL_INSTANCE}`;
 const port = process.env.DB_PORT;
 const environment = process.env.ENVIRONMENT;
+
+let config = {
+    host: host,
+    dialect: 'postgres',
+    pool: {
+        max: 5,
+        min: 0,
+        idle: 10000,
+    },
+}
+if (port) {
+    config.port = Number(port);
+}
 
 // export const database = new Sequelize(name, username, password, {
 //     host: host,
@@ -29,16 +43,7 @@ const environment = process.env.ENVIRONMENT;
 
 class Database {
     constructor() {
-        this.connection = new Sequelize(name, username, password, {
-            host: host,
-            dialect: 'postgres',
-            port: Number(port),
-            pool: {
-                max: 5,
-                min: 0,
-                idle: 10000,
-            },
-        });
+        this.connection = new Sequelize(name, username, password, config);
     }
 
     async configure() {
@@ -71,6 +76,17 @@ class Database {
             await this.connection.sync({alter: true}).then(() => console.log('finished Syncing Tables'));
         } else {
             console.log(`no sync required - ${environment} environment`);
+        }
+    }
+
+    async migrate() {
+        // proper migration required but this for now
+        try {
+            const models = this.initialiseModels();
+            this.associateModels(models);
+            await this.connection.sync().then(() => console.log('finished Syncing Tables'));
+        } catch (error) {
+            console.error('unable to sync', error);
         }
     }
 

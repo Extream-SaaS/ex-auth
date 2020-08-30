@@ -2,13 +2,18 @@ const AuthClient = require('../db/models/authClient');
 const Token = require('../db/models/token');
 
 class AuthClientRepository {
-    // static create(accessToken, userId) {
-    //     const properties = {
-    //         accessToken,
-    //         userId,
-    //     };
-    //     return Token.create(properties);
-    // }
+    static create(secret, name, clientId) {
+        const properties = {
+            secret,
+            name,
+            clientId,
+            grants: [
+                'password',
+                'refresh_token'
+            ],
+        };
+        return AuthClient.create(properties);
+    }
 
     static getByIdSecret(id, secret) {
         return AuthClient.findOne(

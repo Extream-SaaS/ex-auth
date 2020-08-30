@@ -9,7 +9,7 @@ class BaseModel {
     }
 
     async getUser(username, password) {
-        console.log('CALLING GET USER');
+        console.log('CALLING GET USER', username, this.clientId);
         const user = await this.userRepository.getByUsername(username, this.clientId);
         if (!user) {
             return Promise.resolve(null);

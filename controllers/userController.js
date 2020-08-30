@@ -7,7 +7,7 @@ const UserMapper = require('../mappers/user');
 
 class UserController {
     constructor(userRepository, authClientRepository) {
-        this.userRespository = userRepository;
+        this.userRepository = userRepository;
         this.authClientRepository = authClientRepository;
 
         this.registerUser = this.registerUser.bind(this);
@@ -19,13 +19,13 @@ class UserController {
 
     async registerUser(req, res) {
         try {
-            const existingUser = await this.userRespository.getByUsername(req.body.username, req.authClient.clientId);
+            const existingUser = await this.userRepository.getByUsername(req.body.username, req.authClient.clientId);
             if (existingUser) {
                 return sendResponse(res, {message: 'user exists'}, 409);
             }
 
             const hashed = await bcrypt.hash(req.body.password, 10);
-            const newUser = await this.userRespository.create(req.body.username, req.body.email, hashed, null, req.body.user_type, req.body.user, req.authClient.clientId, 'active');
+            const newUser = await this.userRepository.create(req.body.username, req.body.email, hashed, null, req.body.user_type, req.body.user, req.authClient.clientId, 'active');
             if (!newUser) {
                 return sendResponse(res, {message: 'bad request'}, 400);
             }
@@ -38,12 +38,12 @@ class UserController {
 
     async inviteUser(req, res) {
         try {
-            const existingUser = await this.userRespository.getByUsername(req.body.username, req.authClient.clientId);
+            const existingUser = await this.userRepository.getByUsername(req.body.username, req.authClient.clientId);
             if (existingUser) {
                 return sendResponse(res, {message: 'user exists'}, 409);
             }
 
-            const newUser = await this.userRespository.create(req.body.username, req.body.email, undefined, null, req.body.user_type, req.body.user, req.authClient.clientId, 'invited');
+            const newUser = await this.userRepository.create(req.body.username, req.body.email, undefined, null, req.body.user_type, req.body.user, req.authClient.clientId, 'invited');
             if (!newUser) {
                 return sendResponse(res, {message: 'bad request'}, 400);
             }
@@ -57,7 +57,7 @@ class UserController {
 
     async getInvitee(req, res) {
         try {
-            const user = await this.userRespository.getByPublicId(req.params.public_id, req.authClient.clientId);
+            const user = await this.userRepository.getByPublicId(req.params.public_id, req.authClient.clientId);
             if (!user) {
                 return sendResponse(res, {message: 'invitee not found'}, 404);
             }
@@ -70,7 +70,7 @@ class UserController {
 
     async completeInviteeRegistration(req, res) {
         try {
-            const user = await this.userRespository.getByPublicId(req.params.public_id, req.authClient.clientId);
+            const user = await this.userRepository.getByPublicId(req.params.public_id, req.authClient.clientId);
             if (!user) {
                 return sendResponse(res, {message: 'invitee not found'}, 404);
             }
@@ -85,7 +85,7 @@ class UserController {
             user.user_type = req.body.user_type;
             user.fields = JSON.parse(req.body.user);
             user.status = 'active';
-            const updated = await this.userRespository.updateByInstance(user);
+            const updated = await this.userRepository.updateByInstance(user);
             return sendResponse(res, UserMapper.toResponse(updated));
         } catch (e) {
             console.log('error', e);
@@ -95,22 +95,22 @@ class UserController {
 
     async passwordLessLink(req, res) {
         try {
-            const user = await this.userRespository.getByUsername(req.body.username, req.authClient.clientId);
+            const user = await this.userRepository.getByUsername(req.body.username, req.authClient.clientId);
             if (!user) {
                 return sendResponse(res, {message: 'user not found'}, 404);
             }
             const password = await crypto.randomBytes(32).toString('hex');
             user.password = await bcrypt.hash(password, 10);
             user.passwordExpiry = moment().add(30, 'minutes').toDate();
-            let firstName = undefined;
-            let lastName = undefined;
+            let firstName;
+            let lastName;
             if (user.fields.firstName) {
                 firstName = user.fields.firstName;
             }
             if (user.fields.lastName) {
                 lastName = user.fields.lastName;
             }
-            await this.userRespository.updateByInstance(user);
+            await this.userRepository.updateByInstance(user);
             await emailService.sendPasswordlessLoginLink(user.email, user.username, firstName, lastName, password);
             return sendResponse(res);
         } catch (e) {

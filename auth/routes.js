@@ -3,8 +3,9 @@ const cors = require("cors");
 const OAuth2Server = require('oauth2-server');
 const sendResponse = require('../utility/response');
 
-const {userController, authController} = require('../controllers');
+const {userController, authController, clientController} = require('../controllers');
 const authClientRepository = require('../repositories/authClient');
+const clientRepository = require('../repositories/client');
 const userRepository = require('../repositories/user');
 const tokenRepository = require('../repositories/token');
 const BaseModel = require('../auth/models/baseModel');
@@ -26,6 +27,8 @@ class Routes {
             authClient = await authClientRepository.getByBasicAuthHeader(req.headers.authorization);
         } else if (req.headers.authorization.slice(0, 6) === 'Bearer') {
             authClient = await authClientRepository.getByBearerAuthHeader(req.headers.authorization);
+        } else if (req.headers.authorization.slice(0, 6) === 'Secure') {
+            authClient = clientRepository.verifySecureHeader(req.headers.authorization);
         }
         if (!authClient) {
             return sendResponse(res, {message: 'unauthorized'}, 401);
@@ -48,8 +51,10 @@ class Routes {
             return sendResponse(res, undefined, 418, err);
         }
     }
-
+    
     assignRoutes() {
+        this.router.post('/client', clientController.createClient);
+        this.router.post('/client/token', clientController.createClientToken);
         this.router.post('/register', userController.registerUser);
         this.router.post('/invite', userController.inviteUser);
         this.router.get('/invitee/:public_id', userController.getInvitee);

@@ -15,7 +15,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8881;
 
 const routes = require('./auth/routes');
 app.use('/auth', routes.router);
