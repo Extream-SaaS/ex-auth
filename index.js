@@ -1,4 +1,6 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 require('@google-cloud/debug-agent').start({serviceContext: {enableCanary: false}});
 const {database} = require('./db/config/database');
 

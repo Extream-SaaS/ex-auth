@@ -15,7 +15,7 @@ const name = process.env.DB_NAME || process.env.CLOUD_SQL_DATABASE;
 const dbSocketPath = process.env.DB_SOCKET_PATH || "/cloudsql";
 const host = process.env.DB_HOST || `${dbSocketPath}/${process.env.CLOUD_SQL_INSTANCE}`;
 const port = process.env.DB_PORT;
-const environment = process.env.ENVIRONMENT;
+const environment = process.env.ENVIRONMENT || process.env.NODE_ENV;
 
 let config = {
     host: host,
@@ -25,7 +25,7 @@ let config = {
         min: 0,
         idle: 10000,
     },
-}
+};
 if (port) {
     config.port = Number(port);
 }
