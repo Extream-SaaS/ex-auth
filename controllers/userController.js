@@ -25,6 +25,7 @@ class UserController {
             }
 
             const hashed = await bcrypt.hash(req.body.password, 10);
+            console.log(req.body);
             const newUser = await this.userRepository.create(req.body.username, req.body.email, hashed, null, req.body.user_type, req.body.user, req.authClient.clientId, 'active');
             if (!newUser) {
                 return sendResponse(res, {message: 'bad request'}, 400);
