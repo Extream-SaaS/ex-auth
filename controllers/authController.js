@@ -19,8 +19,8 @@ class AuthController {
         const request = new Request(req);
         const response = new Response(res);
         req.oauth.token(request, response).then((token) => {
-            const {accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt} = token;
-            return sendResponse(res, {accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt});
+            const {accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt, user} = token;
+            return sendResponse(res, {accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt, id: user.public_id});
         }).catch((err) => {
             console.log('err', err);
             return sendResponse(res, {message: 'unauthorized'}, 401);
