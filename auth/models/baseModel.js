@@ -39,6 +39,19 @@ class BaseModel {
         return Promise.resolve(token);
     }
 
+    async getAccessToken(accessToken) {
+        console.log('CALLING GET ACCESS TOKEN');
+        const token = await this.tokenRepository.getUserByAccessToken(accessToken);
+        return {
+            accessToken,
+            accessTokenExpiresAt: token.accessTokenExpiresAt,
+            client: {
+                id: token.user.clientId
+            },
+            user: token.user
+        };
+    }
+
     async saveToken(token, client, user) {
         console.log('CALLING SAVE TOKEN');
         const newToken = await this.tokenRepository.create(token.accessToken, token.accessTokenExpiresAt, token.refreshToken, token.refreshTokenExpiresAt, true, client.id, client.id, user.id);

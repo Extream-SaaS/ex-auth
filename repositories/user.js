@@ -1,4 +1,5 @@
 const User = require('../db/models/user');
+const Token = require('../db/models/token');
 
 class UserRepository {
     static create(username, email, password, passwordExpiry, user_type, fields, clientId, status) {
@@ -33,6 +34,22 @@ class UserRepository {
                     username: username,
                     clientId: clientId,
                 }
+            }
+        );
+    }
+
+    static getByToken(authorization) {
+        const token = authorization.slice(7);
+        return User.findOne(
+            {
+                include: [
+                    {
+                        model: Token,
+                        where: {
+                            accessToken: token,
+                        }
+                    }
+                ]
             }
         );
     }

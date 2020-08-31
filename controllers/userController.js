@@ -118,6 +118,10 @@ class UserController {
             return sendResponse(res, undefined, 500, e);
         }
     }
+
+    getUser(req, res) {
+        return sendResponse(res, UserMapper.toResponse(req.user));
+    }
 }
 
 module.exports = UserController;

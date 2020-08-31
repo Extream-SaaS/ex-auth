@@ -1,3 +1,4 @@
+const {Request, Response} = require('oauth2-server');
 const express = require("express");
 const cors = require("cors");
 const OAuth2Server = require('oauth2-server');
@@ -37,7 +38,7 @@ class Routes {
         next();
     }
 
-    async setOauth(req, res, next) {
+    setOauth(req, res, next) {
         try {
             // can add a call to a factory class/function here if using separate auth models for separate clients
             const model = new BaseModel(req.authClient.clientId, userRepository, tokenRepository, authClientRepository);
@@ -51,6 +52,18 @@ class Routes {
             return sendResponse(res, undefined, 418, err);
         }
     }
+
+    async authenticate(req, res, next) {
+        try {
+            const request = new Request(req);
+            const response = new Response(res);
+            const token = await req.oauth.authenticate(request, response);
+            req.user = token.user;
+            next();
+        } catch (err) {
+            return sendResponse(res, {message: err.message}, 401, err);
+        }
+    }
     
     assignRoutes() {
         this.router.post('/client', clientController.createClient);
@@ -62,6 +75,7 @@ class Routes {
         this.router.post('/login', this.setOauth, authController.login);
         this.router.get('/login', authController.getLoginData);
         this.router.post('/login/passwordless', userController.passwordLessLink);
+        this.router.get('/user', this.setOauth, this.authenticate, userController.getUser);
     }
 }
 
