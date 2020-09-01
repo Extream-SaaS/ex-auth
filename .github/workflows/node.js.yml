@@ -42,12 +42,11 @@ jobs:
         env_variables.SENDGRID_CLIENT_SIGNUP_TEMPLATE_ID: d-78529a650e9b418f8e46e583818b517e
         env_variables.SENDGRID_INVITEE_TEMPLATE_ID: d-61d22a5d97214857bcc557f670aa7156
         env_variables.SENDGRID_PASSWORDLESS_LOGIN_LINK_TEMPLATE_ID: d-b1326653421d4bf2aa52a3bfdc2b220c
-#        env_variables.TEST_VAR: "value1"
       
-#     - name: Google Cloud Platform (GCP) CLI - gcloud
-#       uses: actions-hub/gcloud@307.0.0
-#       env:
-#         PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
-#         APPLICATION_CREDENTIALS: ${{secrets.GCLOUD_CREDENTIALS}}
-#       with:
-#         args: app deploy app.yaml
+     - name: Google Cloud Platform (GCP) CLI - gcloud
+       uses: actions-hub/gcloud@307.0.0
+       env:
+         PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
+         APPLICATION_CREDENTIALS: ${{secrets.GCLOUD_CREDENTIALS}}
+       with:
+         args: app deploy app.yaml
