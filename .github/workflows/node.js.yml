@@ -34,7 +34,7 @@ jobs:
     needs: [build]
     steps:
       - name: Create app.yaml
-      - uses: microsoft/variable-substitution@v1 
+        uses: microsoft/variable-substitution@v1 
         with:
           files: './app.yaml'
         env:
@@ -51,7 +51,7 @@ jobs:
           env_variables.SENDGRID_PASSWORDLESS_LOGIN_LINK_TEMPLATE_ID: d-b1326653421d4bf2aa52a3bfdc2b220c
 
       - name: Deploy to GCP
-      - uses: actions-hub/gcloud@307.0.0
+        uses: actions-hub/gcloud@307.0.0
         env:
          PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
          APPLICATION_CREDENTIALS: ${{secrets.GCLOUD_CREDENTIALS}}
