@@ -26,18 +26,10 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-      
-#     - uses: actions/gcloud/auth@master
-#       env:
-#         GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
-        
-#     - uses: actions/gcloud/cli@master
-#       with:
-#         args: "app deploy --quiet --project=APP_ENGINE_PROJECT_NAME"
 
     - uses: microsoft/variable-substitution@v1 
       with:
-        files: '${{ env.GITHUB_WORKSPACE }}/app.yaml'
+        files: './app.yaml'
       env:
         env_variables.TEST_VAR: "value1"
       
