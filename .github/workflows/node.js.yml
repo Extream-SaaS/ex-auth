@@ -31,7 +31,18 @@ jobs:
       with:
         files: './app.yaml'
       env:
-        env_variables.TEST_VAR: "value1"
+        env_variables.ADMIN_EMAIL: rich@extream.app
+        env_variables.CLOUD_SQL_DATABASE: ${{ secrets.CLOUD_SQL_DATABASE }}
+        env_variables.CLOUD_SQL_INSTANCE: ${{ secrets.CLOUD_SQL_INSTANCE }}
+        env_variables.CLOUD_SQL_PASSWORD: ${{ secrets.CLOUD_SQL_PASSWORD }}
+        env_variables.CLOUD_SQL_USERNAME: ${{ secrets.CLOUD_SQL_USERNAME }}
+        env_variables.EXTREAM_FROM_ADDESS: noreply@extream.app
+        env_variables.SECURE_KEY: ${{ secrets.SECURE_KEY }}
+        env_variables.SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+        env_variables.SENDGRID_CLIENT_SIGNUP_TEMPLATE_ID: d-78529a650e9b418f8e46e583818b517e
+        env_variables.SENDGRID_INVITEE_TEMPLATE_ID: d-61d22a5d97214857bcc557f670aa7156
+        env_variables.SENDGRID_PASSWORDLESS_LOGIN_LINK_TEMPLATE_ID: d-b1326653421d4bf2aa52a3bfdc2b220c
+#        env_variables.TEST_VAR: "value1"
       
 #     - name: Google Cloud Platform (GCP) CLI - gcloud
 #       uses: actions-hub/gcloud@307.0.0
