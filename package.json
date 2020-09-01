@@ -23,14 +23,18 @@
   "homepage": "https://github.com/Extream-SaaS/ex-auth#readme",
   "dependencies": {
     "@google-cloud/debug-agent": "^5.1.2",
+    "@sendgrid/mail": "^7.2.4",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "node-oauth2-server": "^2.4.0",
-    "pg": "^8.3.0"
+    "moment": "^2.27.0",
+    "oauth2-server": "^3.1.1",
+    "pg": "^8.3.0",
+    "sequelize": "^6.3.4"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "eslint": "^7.7.0"
   }
 }
