@@ -28,6 +28,21 @@ class TokenRepository {
         );
     }
 
+    static getUserByAccessToken(accessToken) {
+        return Token.findOne(
+            {
+                where: {
+                    accessToken
+                },
+                include: [
+                    {
+                        model: User
+                    }
+                ]
+            }
+        );
+    }
+
     static getByRefreshToken(refreshToken) {
         return Token.findOne(
             {

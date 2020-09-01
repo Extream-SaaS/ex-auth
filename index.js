@@ -1,4 +1,6 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 require('@google-cloud/debug-agent').start({serviceContext: {enableCanary: false}});
 const {database} = require('./db/config/database');
 
@@ -15,7 +17,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8881;
 
 const routes = require('./auth/routes');
 app.use('/auth', routes.router);

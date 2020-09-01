@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "node index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "migrate": "MIGRATE=migration node migrate",
+    "test": "echo \"No test specified\""
   },
   "repository": {
     "type": "git",

@@ -4,6 +4,13 @@ Extream Authentication server
 
 Internal RESTful API for OAuth2
 
+## Deployment
+
+Source the environment vars before deploying
+
+`set -o allexport && [[ -f .env ]] && source .env && set +o allexport`
+`gcloud app deploy`
+
 ## Login
 
 POST `/auth/login`

@@ -9,7 +9,7 @@ class BaseModel {
     }
 
     async getUser(username, password) {
-        console.log('CALLING GET USER');
+        console.log('CALLING GET USER', username, this.clientId);
         const user = await this.userRepository.getByUsername(username, this.clientId);
         if (!user) {
             return Promise.resolve(null);
@@ -37,6 +37,19 @@ class BaseModel {
         }
         token = {...token.get({plain: true}), ...{client: token.refreshClient}};
         return Promise.resolve(token);
+    }
+
+    async getAccessToken(accessToken) {
+        console.log('CALLING GET ACCESS TOKEN');
+        const token = await this.tokenRepository.getUserByAccessToken(accessToken);
+        return {
+            accessToken,
+            accessTokenExpiresAt: token.accessTokenExpiresAt,
+            client: {
+                id: token.user.clientId
+            },
+            user: token.user
+        };
     }
 
     async saveToken(token, client, user) {
