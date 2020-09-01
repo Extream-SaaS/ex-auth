@@ -35,10 +35,16 @@ jobs:
 #       with:
 #         args: "app deploy --quiet --project=APP_ENGINE_PROJECT_NAME"
 
-    - name: Google Cloud Platform (GCP) CLI - gcloud
-      uses: actions-hub/gcloud@307.0.0
-      env:
-        PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
-        APPLICATION_CREDENTIALS: ${{secrets.GCLOUD_CREDENTIALS}}
+    - uses: microsoft/variable-substitution@v1 
       with:
-        args: app deploy app.yaml
+        files: '${{ env.GITHUB_WORKSPACE }}/app.yaml'
+      env:
+        env_variables.TEST_VAR: "value1"
+      
+#     - name: Google Cloud Platform (GCP) CLI - gcloud
+#       uses: actions-hub/gcloud@307.0.0
+#       env:
+#         PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
+#         APPLICATION_CREDENTIALS: ${{secrets.GCLOUD_CREDENTIALS}}
+#       with:
+#         args: app deploy app.yaml
