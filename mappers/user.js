@@ -5,6 +5,7 @@ class UserMapper {
             username: user.username,
             email: user.email,
             fields: user.fields,
+            user_type: user.user_type,
         };
     }
 
