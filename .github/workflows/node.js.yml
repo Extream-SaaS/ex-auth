@@ -33,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
+      - uses: actions/checkout@v2
       - name: Create app.yaml
         uses: microsoft/variable-substitution@v1 
         with:
