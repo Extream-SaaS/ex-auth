@@ -38,6 +38,16 @@ class User extends Model {
                 }
             },
             {
+                indexes: [
+                    {
+                        unique: true,
+                        fields: ['username', 'clientId'],
+                    },
+                    {
+                        unique: true,
+                        fields: ['email', 'clientId'],
+                    }
+                ],
                 sequelize: sequelize,
                 modelName: 'user',
                 charset: 'utf8',

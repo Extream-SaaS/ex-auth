@@ -2,7 +2,7 @@ const User = require('../db/models/user');
 const Token = require('../db/models/token');
 
 class UserRepository {
-    static create(username, email, password, passwordExpiry, user_type, fields, clientId, status) {
+    static create(username, email, password, passwordExpiry, user_type, fields, clientId, status, transaction) {
         const properties = {
             username,
             email,
@@ -13,7 +13,11 @@ class UserRepository {
             clientId,
             status,
         };
-        return User.create(properties);
+        return User.create(properties, {transaction: transaction});
+    }
+
+    static count() {
+        return User.count();
     }
 
     static getByPublicId(publicId, clientId) {

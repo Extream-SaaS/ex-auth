@@ -1,7 +1,4 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
+name: Ex-Auth
 
 on:
   push:
@@ -21,12 +18,23 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
+      id: Build
       uses: actions/setup-node@v1.4.3
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build --if-present
-    - run: npm test
+    - name: Test
+      id: Test
+      run: npm test
+
+    - uses: act10ns/slack@v1
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      with:
+        status: ${{ job.status }}
+        steps: ${{ toJson(steps) }}
+      if: always()
 
   deploy:
     name: Deploy
@@ -34,7 +42,8 @@ jobs:
     needs: [build]
     steps:
       - uses: actions/checkout@v2
-      - name: Create app.yaml
+      - name: Configure Environment Variables
+        id: Create-Environment-Vairables
         uses: microsoft/variable-substitution@v1 
         with:
           files: './app.yaml'
@@ -52,9 +61,18 @@ jobs:
           env_variables.SENDGRID_PASSWORDLESS_LOGIN_LINK_TEMPLATE_ID: d-b1326653421d4bf2aa52a3bfdc2b220c
 
       - name: Deploy to GCP
+        id: Deploy
         uses: actions-hub/gcloud@307.0.0
         env:
          PROJECT_ID: ${{secrets.GCLOUD_PROJECT_ID}}
          APPLICATION_CREDENTIALS: ${{secrets.GCLOUD_CREDENTIALS}}
         with:
          args: app deploy app.yaml
+
+      - uses: act10ns/slack@v1
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+        if: always()
