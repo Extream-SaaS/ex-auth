@@ -1,7 +1,4 @@
 const {Model, DataTypes} = require('sequelize');
-// import AuthClient from './AuthClient';
-// import User from './User';
-// import Login from './Login';
 class Token extends Model {
     static definition(sequelize) {
         return [
@@ -31,6 +28,9 @@ class Token extends Model {
                 scopes: {
                     type: DataTypes.JSON,
                 },
+                eventId: {
+                    type: DataTypes.UUID,
+                },
                 enabled: {
                     type: DataTypes.BOOLEAN,
                     defaultValue: true,
@@ -48,10 +48,8 @@ class Token extends Model {
 
     static associate(models) {
         Token.belongsTo(models.user);
-        // Token.belongsTo(models.User);
         Token.belongsTo(models.authClient, { as: 'accessClient' });
         Token.belongsTo(models.authClient, { as: 'refreshClient' });
-        // Token.belongsTo(models.Login);
     }
 }
 

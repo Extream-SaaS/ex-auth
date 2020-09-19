@@ -121,7 +121,7 @@ class UserController {
     }
 
     getUser(req, res) {
-        return sendResponse(res, UserMapper.toResponse(req.user));
+        return sendResponse(res, UserMapper.toResponseWithEventId(req.token));
     }
 }
 

@@ -59,20 +59,6 @@ class User extends Model {
     static associate(models) {
         User.hasMany(models.token);
     }
-
-    // public id: string;
-    // public username: string;
-    // public password: string;
-    // public pin: string;
-    // public email: string;
-    // public state: string;
-    // public readonly userAccountScopes ?: UserAccountScopes[];
-    // public scopes: string[];
-    // public resetToken: string;
-    // public phone: string;
-    // public passwordShares: {key: string, value: string}[];
-    // public pinShares: {key: string, value: string}[];
-    // public admin: number;
 }
 
 module.exports = User;

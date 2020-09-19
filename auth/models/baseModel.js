@@ -48,7 +48,8 @@ class BaseModel {
             client: {
                 id: token.user.clientId
             },
-            user: token.user
+            user: token.user,
+            eventId: token.eventId,
         };
     }
 
@@ -60,6 +61,7 @@ class BaseModel {
         }
         token.client = client;
         token.user = user;
+        token.id = newToken.id;
         return Promise.resolve(token);
     }
 

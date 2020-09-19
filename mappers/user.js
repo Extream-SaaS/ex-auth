@@ -9,6 +9,14 @@ class UserMapper {
         };
     }
 
+    static toResponseWithEventId(token) {
+        const user = this.toResponse(token.user);
+        return {
+            ...user,
+            eventId: token.eventId,
+        };
+    }
+
     static getLoginDataResponse(user) {
         return {
             username: user.username,
