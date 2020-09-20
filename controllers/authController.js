@@ -48,7 +48,12 @@ class AuthController {
             if (user.status !== 'active') {
                 return sendResponse(res, undefined, 400, 'user is not activated');
             }
-            if (user.user_type === 'attendee' || user.user_type === 'audience') {
+            // this is bad news, but we cannot get actors to create passwords when coming from an external source
+            if (user.user_type === 'attendee' ||
+                user.user_type === 'audience' ||
+                user.user_type === 'actor' ||
+                user.user_type === 'crew'
+            ) {
                 const password = crypto.randomBytes(32).toString('hex');
                 user.password = await bcrypt.hash(password, 10);
                 user.passwordExpiry = moment().add(30, 'minutes').toDate();
