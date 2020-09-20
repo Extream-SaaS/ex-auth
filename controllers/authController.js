@@ -17,7 +17,7 @@ class AuthController {
 
     login(req, res) {
         if (!req.body.eventId) {
-            return sendResponse(res, {message: 'missing parameter: event_id'}, 400);
+            return sendResponse(res, {message: 'missing parameter: eventId'}, 400);
         }
         const request = new Request(req);
         const response = new Response(res);
