@@ -28,6 +28,17 @@ class TokenRepository {
         );
     }
 
+    static getByAccessTokenAccessClient(accessToken, accessClientId) {
+        return Token.findOne(
+            {
+                where: {
+                    accessToken,
+                    accessClientId,
+                }
+            }
+        );
+    }
+
     static getUserByAccessToken(accessToken) {
         return Token.findOne(
             {
@@ -60,6 +71,10 @@ class TokenRepository {
                 ]
             }
         );
+    }
+
+    static updateByInstance(token) {
+        return token.save();
     }
 
     static deleteById(tokenId) {

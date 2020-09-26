@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const UserMapper = require('../mappers/user');
 const moment = require('moment');
 const crypto = require('crypto');
+const eventLogger = require('../utility/monitoring');
 
 
 class AuthController {
@@ -16,10 +17,17 @@ class AuthController {
     }
 
     login(req, res) {
+        if (!req.body.eventId) {
+            return sendResponse(res, {message: 'missing parameter: eventId'}, 400);
+        }
         const request = new Request(req);
         const response = new Response(res);
-        req.oauth.token(request, response).then((token) => {
+        req.oauth.token(request, response).then(async (token) => {
             const {accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt, user} = token;
+            const persistedToken = await this.tokenRespository.getByAccessTokenAccessClient(accessToken, token.client.id);
+            persistedToken.eventId = req.body.eventId;
+            await this.tokenRespository.updateByInstance(persistedToken);
+            await eventLogger.logEvent({event: {command: 'login', success: true}, auth: {token: accessToken, user: {id: user.public_id}}}, req.authClient.clientId, req.body.eventId);
             return sendResponse(res, {accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt, id: user.public_id});
         }).catch((err) => {
             console.log('err', err);

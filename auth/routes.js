@@ -57,8 +57,7 @@ class Routes {
         try {
             const request = new Request(req);
             const response = new Response(res);
-            const token = await req.oauth.authenticate(request, response);
-            req.user = token.user;
+            req.token = await req.oauth.authenticate(request, response);
             next();
         } catch (err) {
             return sendResponse(res, {message: err.message}, 401, err);

@@ -34,10 +34,6 @@ class AuthClient extends Model {
         AuthClient.hasMany(models.token, { foreignKey: 'refreshClientId'});
         AuthClient.belongsTo(models.client);
     }
-    // public id: string;
-    // public secret: string;
-    // public grants: string;
-    // public name: string;
 }
 
 module.exports = AuthClient;

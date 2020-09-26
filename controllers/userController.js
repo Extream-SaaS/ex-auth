@@ -4,6 +4,7 @@ const moment = require('moment');
 const sendResponse = require('../utility/response');
 const emailService = require('../services/email');
 const UserMapper = require('../mappers/user');
+const eventLogger = require('../utility/monitoring');
 
 class UserController {
     constructor(userRepository, authClientRepository) {
@@ -30,6 +31,7 @@ class UserController {
             if (!newUser) {
                 return sendResponse(res, {message: 'bad request'}, 400);
             }
+            await eventLogger.logEvent({event: {command: 'register', success: true}, auth: {user: {id: newUser.public_id}}}, req.authClient.clientId, req.body.eventId || null);
             return sendResponse(res, UserMapper.toResponse(newUser));
         } catch (e) {
             console.log('error', e);
@@ -121,7 +123,7 @@ class UserController {
     }
 
     getUser(req, res) {
-        return sendResponse(res, UserMapper.toResponse(req.user));
+        return sendResponse(res, UserMapper.toResponseWithEventId(req.token));
     }
 }
 

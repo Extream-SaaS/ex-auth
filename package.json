@@ -24,6 +24,8 @@
   "homepage": "https://github.com/Extream-SaaS/ex-auth#readme",
   "dependencies": {
     "@google-cloud/debug-agent": "^5.1.2",
+    "@google-cloud/pubsub": "^2.3.0",
+    "grpc": "^1.24.3",
     "@sendgrid/mail": "^7.2.4",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",

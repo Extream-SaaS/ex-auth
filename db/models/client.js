@@ -40,14 +40,6 @@ class Client extends Model {
         Client.hasMany(models.user);
         Client.hasMany(models.authClient);
     }
-
-
-    // public id: string;
-    // public grants: string;
-    // public accessTokenLifetime: number;
-    // public refreshTokenLifetime: number;
-    // public authModel: string;
-    // public name: string;
 }
 
 module.exports = Client;
