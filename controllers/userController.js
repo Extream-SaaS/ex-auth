@@ -16,6 +16,7 @@ class UserController {
         this.getInvitee = this.getInvitee.bind(this);
         this.completeInviteeRegistration = this.completeInviteeRegistration.bind(this);
         this.passwordLessLink = this.passwordLessLink.bind(this);
+        this.updateUser = this.updateUser.bind(this);
     }
 
     async registerUser(req, res) {
@@ -52,6 +53,34 @@ class UserController {
             }
             await emailService.sendInviteeSignUp(newUser.email, newUser.public_id, 'some name');
             return sendResponse(res);
+        } catch (e) {
+            console.log('error', e);
+            return sendResponse(res, undefined, 500, e);
+        }
+    }
+
+    async updateUser(req, res) {
+        try {
+            if (req.params.public_id !== req.token.user.public_id) {
+                return sendResponse(res, {message: 'unauthorized'}, 401);
+            }
+            let user = await this.userRepository.getByPublicId(req.params.public_id, req.authClient.clientId);
+            if (!user) {
+                return sendResponse(res, {message: 'user not found'}, 404);
+            }
+            const allowedProperties = {
+                username: req.body.username,
+                email: req.body.email,
+                user_type: req.body.user_type,
+                fields: JSON.parse(req.body.fields || null) || undefined,
+            };
+            if (req.body.password) {
+                allowedProperties.password = await bcrypt.hash(req.body.password, 10);
+                allowedProperties.passwordExpiry = null;
+            }
+            Object.keys(allowedProperties).forEach(key => allowedProperties[key] === undefined && delete allowedProperties[key]);
+            await this.userRepository.updateByInstanceWithProperties(user, allowedProperties);
+            return sendResponse(res, UserMapper.toResponse(user));
         } catch (e) {
             console.log('error', e);
             return sendResponse(res, undefined, 500, e);

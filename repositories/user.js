@@ -61,6 +61,10 @@ class UserRepository {
     static updateByInstance(user) {
         return user.save();
     }
+
+    static updateByInstanceWithProperties(user, properties) {
+        return user.update(properties);
+    }
 }
 
 module.exports = UserRepository;
