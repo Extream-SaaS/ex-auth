@@ -62,7 +62,7 @@ class UserController {
     async updateUser(req, res) {
         try {
             if (req.params.public_id !== req.token.user.public_id) {
-                return sendResponse(res, {message: 'unauthorized'}, 400);
+                return sendResponse(res, {message: 'unauthorized'}, 401);
             }
             let user = await this.userRepository.getByPublicId(req.params.public_id, req.authClient.clientId);
             if (!user) {
