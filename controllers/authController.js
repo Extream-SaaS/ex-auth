@@ -59,7 +59,7 @@ class AuthController {
                 // return the non-hashed password here
                 user.password = password;
                 return sendResponse(res, UserMapper.getLoginDataResponse(user));
-            } else if (user.user_type === 'moderator') {
+            } else if (user.user_type === 'moderator' || user.user_type === 'crew' || user.user_type === 'chief') {
                 return sendResponse(res, UserMapper.getLoginDataResponse({username: user.username, user_type: user.user_type}));
             } else {
                 return sendResponse(res, undefined, 400, 'unknown user type');
