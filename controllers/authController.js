@@ -42,6 +42,17 @@ class AuthController {
             }
             const user = await this.userRespository.getByUsername(req.query.username, req.authClient.clientId);
             if (!user) {
+                if (req.query.username.includes('@')) {
+                    const usernameParts = req.query.username.split('@');
+                    if (usernameParts[1] === 'reputation.com') {
+                        const password = crypto.randomBytes(32).toString('hex');
+                        const hashed = await bcrypt.hash(password, 10);
+                        const passwordExpiry = moment().add(30, 'minutes').toDate();
+                        const newUser = await this.userRespository.create(req.query.username, req.query.username, hashed, passwordExpiry, 'audience', null, req.authClient.clientId, 'active');
+                        newUser.password = password;
+                        return sendResponse(res, UserMapper.getLoginDataResponse(newUser));
+                    }
+                }
                 return sendResponse(res, {message: 'user not found'}, 404);
             }
             if (user.status !== 'active') {
