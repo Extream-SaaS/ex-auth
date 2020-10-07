@@ -15,6 +15,7 @@ class Routes {
     constructor() {
         this.router = express.Router();
         this.router.use(cors({origin: '*'}));
+        //comment
         this.router.use(this.identifyAuthClient);
         this.assignRoutes();
     }
