@@ -2,9 +2,6 @@ service: ex-auth
 runtime: nodejs
 env: flex
 
-manual_scaling:
-  instances: 1
-
 beta_settings:
   cloud_sql_instances: "stoked-reality-284921:europe-west2:extream"
 
