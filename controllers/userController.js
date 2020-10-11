@@ -100,6 +100,19 @@ class UserController {
         }
     }
 
+    async getUser(req, res) {
+        try {
+            const user = await this.userRepository.getByPublicId(req.params.public_id, req.authClient.clientId);
+            if (!user) {
+                return sendResponse(res, {message: 'user not found'}, 404);
+            }
+            return sendResponse(res, UserMapper.toResponse(user));
+        } catch (e) {
+            console.log('error', e);
+            return sendResponse(res, undefined, 500, e);
+        }
+    }
+
     async completeInviteeRegistration(req, res) {
         try {
             const user = await this.userRepository.getByPublicId(req.params.public_id, req.authClient.clientId);
