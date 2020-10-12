@@ -17,6 +17,8 @@ class UserController {
         this.completeInviteeRegistration = this.completeInviteeRegistration.bind(this);
         this.passwordLessLink = this.passwordLessLink.bind(this);
         this.updateUser = this.updateUser.bind(this);
+        this.getUser = this.getUser.bind(this);
+        this.getUserByToken = this.getUserByToken.bind(this);
     }
 
     async registerUser(req, res) {
@@ -32,7 +34,8 @@ class UserController {
             if (!newUser) {
                 return sendResponse(res, {message: 'bad request'}, 400);
             }
-            await eventLogger.logEvent({event: {command: 'register', success: true}, auth: {user: {id: newUser.public_id}}}, req.authClient.clientId, req.body.eventId || null);
+            const userLogData = {id: newUser.public_id, email: newUser.email, username: newUser.username, fields: newUser.fields, user_type: newUser.user_type};
+            await eventLogger.logEvent({event: {command: 'register', success: true}, auth: {user: userLogData}}, req.authClient.clientId, req.body.eventId || null);
             return sendResponse(res, UserMapper.toResponse(newUser));
         } catch (e) {
             console.log('error', e);
@@ -164,7 +167,7 @@ class UserController {
         }
     }
 
-    getUser(req, res) {
+    getUserByToken(req, res) {
         return sendResponse(res, UserMapper.toResponseWithEventId(req.token));
     }
 }
