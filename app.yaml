@@ -17,3 +17,19 @@ env_variables:
   SENDGRID_INVITEE_TEMPLATE_ID: $SENDGRID_INVITEE_TEMPLATE_ID
   SENDGRID_PASSWORDLESS_LOGIN_LINK_TEMPLATE_ID: $SENDGRID_PASSWORDLESS_LOGIN_LINK_TEMPLATE_ID
   SENDGRID_CLIENT_SIGNUP_TEMPLATE_ID: $SENDGRID_CLIENT_SIGNUP_TEMPLATE_ID
+
+liveness_check:
+  path: "/status"
+  check_interval_sec: 30
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+  initial_delay_sec: 300
+
+readiness_check:
+  path: "/status"
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+  app_start_timeout_sec: 300
