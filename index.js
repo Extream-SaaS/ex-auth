@@ -25,7 +25,7 @@ app.use('/auth', routes.router);
 
 
 // eslint-disable-next-line no-unused-vars
-async function importUsers(req, res) {
+/*async function importUsers(req, res) {
     const XLSX = require('xlsx');
     const userRepository = require('./repositories/user');
     const {UniqueConstraintError} = require('sequelize');
@@ -35,19 +35,29 @@ async function importUsers(req, res) {
     try {
         console.log('running import');
 
-        const workbook = XLSX.readFile('import2.xlsx');
+        const workbook = XLSX.readFile('dell-think-tank-2.xlsx');
         const sheet_name_list = workbook.SheetNames;
         const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
         const usersToInsert = data.length;
         console.log(`Users to import: ${usersToInsert}`);
         for (const user of data) {
+            const userType = user.user_type;
             const fields = {
-                firstName: user['First Name'],
-                lastName: user['Last Name'],
-                company: user.Company,
+                firstName: user['Firstname'],
+                lastName: user['Lastname'],
+                breakout1: user.breakout1,
+                breakout2: user.breakout2,
+                breakout3: user.breakout3,
+                breakout4: user.breakout4,
+                breakout5: user.breakout5,
+                breakout6: user.breakout6,
+                breakout7: user.breakout7,
+                breakout8: user.breakout8,
+                breakout9: user.breakout9,
+                breakout10: user.breakout10,
             };
             try {
-                await userRepository.create(user.Email, user.Email, null, null, 'audience', JSON.stringify(fields), 4, 'active');
+                await userRepository.create(user.Email, user.Email, null, null, userType, JSON.stringify(fields), 8, 'active');
             } catch (e) {
                 console.log(`error on ${user.Email}`);
                 if (e instanceof UniqueConstraintError) {
@@ -65,11 +75,21 @@ async function importUsers(req, res) {
         console.error('error', e);
         res.sendStatus(500);
     }
+}*/
+
+function status(req, res) {
+    return res.sendStatus(200);
 }
 
 database.configure().then(() => {
-    app.listen(port, () => console.log(`listening on port ${port}`));
     // app.use('/import', importUsers);
+    app.use('/status', status);
+    const server = app.listen(port, () => console.log(`listening on port ${port}`));
+    server.keepAliveTimeout = 65000;
+    server.headersTimeout = 70000;
+    server.on('error', (e) => {
+        console.error('Unable to start server:', e.message || e);
+    });
 }).catch((err) => {
     console.log('failed to configure database', err);
     process.exit(1);
