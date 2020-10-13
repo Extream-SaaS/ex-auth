@@ -85,8 +85,8 @@ database.configure().then(() => {
     // app.use('/import', importUsers);
     app.use('/status', status);
     const server = app.listen(port, () => console.log(`listening on port ${port}`));
-    // server.keepAliveTimeout = 65000;
-    // server.headersTimeout = 70000;
+    server.keepAliveTimeout = 65000;
+    server.headersTimeout = 70000;
     server.on('error', (e) => {
         console.error('Unable to start server:', e.message || e);
     });
