@@ -24,6 +24,7 @@ let config = {
         max: 5,
         min: 0,
         idle: 10000,
+        acquire: 60000,
     },
 };
 if (port) {
