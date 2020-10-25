@@ -21,6 +21,12 @@ class User extends Model {
                 email: {
                     type: DataTypes.STRING,
                 },
+                firstName: {
+                    type: DataTypes.STRING,
+                },
+                lastName: {
+                    type: DataTypes.STRING,
+                },
                 password: {
                     type: DataTypes.STRING,
                 },

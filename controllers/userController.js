@@ -29,7 +29,7 @@ class UserController {
             }
 
             const hashed = await bcrypt.hash(req.body.password, 10);
-            const newUser = await this.userRepository.create(req.body.username, req.body.email, hashed, null, req.body.user_type, req.body.user, req.authClient.clientId, 'active');
+            const newUser = await this.userRepository.create(req.body.username, req.body.email, req.body.firstName, req.body.lastName, hashed, null, req.body.user_type, req.body.user, req.authClient.clientId, 'active');
             if (!newUser) {
                 return sendResponse(res, {message: 'bad request'}, 400);
             }

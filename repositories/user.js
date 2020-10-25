@@ -2,7 +2,7 @@ const User = require('../db/models/user');
 const Token = require('../db/models/token');
 
 class UserRepository {
-      static create(username, email, password, passwordExpiry, user_type, user_fields, clientId, status, transaction) {
+      static create(username, email, firstName, lastName, password, passwordExpiry, user_type, user_fields, clientId, status, transaction) {
     let fields = {};
     try {
         fields = JSON.parse(user_fields);
@@ -12,6 +12,8 @@ class UserRepository {
         const properties = {
             username,
             email,
+            firstName,
+            lastName,
             password,
             passwordExpiry,
             user_type,

@@ -85,7 +85,7 @@ class Database {
         try {
             const models = this.initialiseModels();
             this.associateModels(models);
-            await this.connection.sync().then(() => console.log('finished Syncing Tables'));
+            await this.connection.sync({ alter: true }).then(() => console.log('finished Syncing Tables'));
         } catch (error) {
             console.error('unable to sync', error);
         }
