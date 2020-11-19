@@ -48,8 +48,8 @@ class EmailService {
         return this.send(to, templateId, templateData);
     }
 
-    async sendInviteeSignUp(to, userPublicId, itemName) {
-        const link = `http://somegreatfrontend.com/register?id=${userPublicId}`;
+    async sendInviteeSignUp(to, userPublicId, itemName, regLink) {
+        const link = `${regLink}${userPublicId}`;
         const templateId = process.env.SENDGRID_INVITEE_TEMPLATE_ID;
         const templateData = {
             itemName,
@@ -58,7 +58,7 @@ class EmailService {
         return this.send(to, templateId, templateData);
     }
 
-    async sendPasswordlessLoginLink(to, username, firstName, lastName, password) {
+    async sendPasswordlessLoginLink(to, username, firstName, lastName, password, itemName, loginLink) {
         let greeting = 'Hi';
         if (firstName) {
             greeting = `${greeting} ${firstName}`;
@@ -66,9 +66,10 @@ class EmailService {
         if (lastName) {
             greeting = `${greeting} ${lastName}`;
         }
-        const link = `http://somegreatfrontend.com?username=${username}&token=${password}`;
+        const link = `${loginLink}?username=${username}&token=${password}`;
         const templateId = process.env.SENDGRID_PASSWORDLESS_LOGIN_LINK_TEMPLATE_ID;
         const templateData = {
+            itemName,
             greeting,
             link
         };

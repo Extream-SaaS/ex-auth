@@ -3,12 +3,13 @@ const Token = require('../db/models/token');
 
 class UserRepository {
       static create(username, email, firstName, lastName, password, passwordExpiry, user_type, user_fields, clientId, status, transaction) {
-    let fields = {};
-    try {
-        fields = JSON.parse(user_fields);
-    } catch (error) {
-        fields = JSON.parse(user_fields.substring(1).slice(0, -1));
-    }
+        let fields = {};
+        console.log(user_fields);
+        try {
+            fields = JSON.parse(user_fields);
+        } catch (error) {
+            fields = JSON.parse(user_fields.substring(1).slice(0, -1));
+        }
         const properties = {
             username,
             email,

@@ -49,11 +49,13 @@ class UserController {
                 return sendResponse(res, {message: 'user exists'}, 409);
             }
 
-            const newUser = await this.userRepository.create(req.body.username, req.body.email, undefined, null, req.body.user_type, req.body.user, req.authClient.clientId, 'invited');
+            const newUser = await this.userRepository.create(req.body.username, req.body.email, null, null, undefined, null, req.body.user_type, req.body.user, req.authClient.clientId, 'invited');
             if (!newUser) {
                 return sendResponse(res, {message: 'bad request'}, 400);
             }
-            await emailService.sendInviteeSignUp(newUser.email, newUser.public_id, 'some name');
+            if (typeof req.body.notify === 'undefined' || req.body.notify !== 'false') {
+                await emailService.sendInviteeSignUp(newUser.email, newUser.public_id, req.authClient.name, req.authClient.registrationUrl);
+            }
             return sendResponse(res);
         } catch (e) {
             console.log('error', e);
@@ -158,7 +160,7 @@ class UserController {
                 lastName = user.fields.lastName;
             }
             await this.userRepository.updateByInstance(user);
-            await emailService.sendPasswordlessLoginLink(user.email, user.username, firstName, lastName, password);
+            await emailService.sendPasswordlessLoginLink(user.email, user.username, firstName, lastName, password, req.authClient.name, req.authClient.loginUrl);
             return sendResponse(res);
         } catch (e) {
             console.log('error', e);
