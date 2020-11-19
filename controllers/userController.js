@@ -46,7 +46,7 @@ class UserController {
         try {
             const existingUser = await this.userRepository.getByUsername(req.body.username, req.authClient.clientId);
             if (existingUser) {
-                return sendResponse(res, {message: 'user exists'}, 409);
+                return sendResponse(res, {message: 'user exists', id: existingUser.public_id}, 409);
             }
 
             const newUser = await this.userRepository.create(req.body.username, req.body.email, null, null, undefined, null, req.body.user_type, req.body.user, req.authClient.clientId, 'invited');
