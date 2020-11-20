@@ -57,7 +57,7 @@ class AuthController {
                 return sendResponse(res, {message: 'user not found'}, 404);
             }
             if (user.status !== 'active') {
-                return sendResponse(res, undefined, 400, 'user is not activated');
+                return sendResponse(res, { id: user.public_id }, 400, 'user is not activated');
             }
             // this is bad news, but we cannot get actors to create passwords when coming from an external source
             if (user.user_type === 'attendee' ||
