@@ -56,7 +56,7 @@ class UserController {
             if (typeof req.body.notify === 'undefined' || req.body.notify !== 'false') {
                 await emailService.sendInviteeSignUp(newUser.email, newUser.public_id, req.authClient.name, req.authClient.registrationUrl);
             }
-            return sendResponse(res);
+            return sendResponse(res, UserMapper.toResponse(newUser));
         } catch (e) {
             console.log('error', e);
             return sendResponse(res, undefined, 500, e);
