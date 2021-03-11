@@ -19,6 +19,7 @@ class UserController {
         this.updateUser = this.updateUser.bind(this);
         this.getUser = this.getUser.bind(this);
         this.getUserByToken = this.getUserByToken.bind(this);
+        this.getUsers = this.getUsers.bind(this);
     }
 
     async registerUser(req, res) {
@@ -77,6 +78,8 @@ class UserController {
                 email: req.body.email,
                 user_type: req.body.user_type,
                 fields: JSON.parse(req.body.fields || null) || undefined,
+                firstNam: req.body.firstName,
+                lastName: req.body.lastName,
             };
             if (req.body.password) {
                 allowedProperties.password = await bcrypt.hash(req.body.password, 10);
@@ -117,6 +120,54 @@ class UserController {
         }
     }
 
+    async getUsers(req, res) {
+        try {
+            if (req.token.user.user_type !== 'crew' && req.token.user.user_type !== 'chief') {
+                return sendResponse(res, { message: 'Unauthorized' }, 401)
+            }
+            const users = await this.userRepository.getByClientId(req.authClient.clientId, req.params.user_type);
+            if (users) {
+                const allowedProperties = ['username', 'email', 'user_type', 'firstName', 'lastName'];
+                const prepped = users.reduce((userList, user) => {
+                    return {
+                        ...userList,
+                        [user.public_id]: allowedProperties.reduce((acc, prop) => {
+                            return {...acc, [prop]: user[prop]};
+                        }, {})
+                    };
+                }, {});
+                return sendResponse(res, prepped);
+            }
+        } catch (e) {
+            console.log('error', e);
+            return sendResponse(res, undefined, 500, e);
+        }
+    }
+
+    async getUsersByOrg(req, res) {
+        try {
+            if (req.token.user.user_type !== 'chief') {
+                return sendResponse(res, { message: 'Unauthorized' }, 401)
+            }
+            const users = await this.userRepository.getByOrganisation(req.params.organisation, req.params.user_type);
+            if (users) {
+                const allowedProperties = ['username', 'email', 'user_type', 'firstName', 'lastName'];
+                const prepped = users.reduce((userList, user) => {
+                    return {
+                        ...userList,
+                        [user.public_id]: allowedProperties.reduce((acc, prop) => {
+                            return {...acc, [prop]: user[prop]};
+                        }, {})
+                    };
+                }, {});
+                return sendResponse(res, prepped);
+            }
+        } catch (e) {
+            console.log('error', e);
+            return sendResponse(res, undefined, 500, e);
+        }
+    }
+
     async completeInviteeRegistration(req, res) {
         try {
             const user = await this.userRepository.getByPublicId(req.params.public_id, req.authClient.clientId);
@@ -132,6 +183,8 @@ class UserController {
             user.username = req.body.username;
             user.email = req.body.email;
             user.user_type = req.body.user_type;
+            user.firstName = req.body.firstNam;
+            user.lastName = req.body.lastName;
             user.fields = JSON.parse(req.body.user);
             user.status = 'active';
             const updated = await this.userRepository.updateByInstance(user);
