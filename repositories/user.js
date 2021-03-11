@@ -71,6 +71,18 @@ class UserRepository {
         );
     }
 
+    static getByClientId(clientId, user_type=null) {
+        const where = {
+            clientId,
+        };
+        if (user_type) {
+            where.user_type = user_type;
+        }
+        return User.findAll({
+            where,
+        });
+    }
+
     static updateByInstance(user) {
         return user.save();
     }

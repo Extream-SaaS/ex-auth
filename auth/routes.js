@@ -78,6 +78,7 @@ class Routes {
         this.router.get('/user', this.setOauth, this.authenticate, userController.getUserByToken);
         this.router.patch('/user/:public_id', this.setOauth, this.authenticate, userController.updateUser);
         this.router.get('/user/:public_id', this.setOauth, this.authenticate, userController.getUser);
+        this.router.get('/users/:user_type', this.setOauth, this.authenticate, userController.getUsers);
     }
 }
 
