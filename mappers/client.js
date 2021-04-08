@@ -15,6 +15,8 @@ class ClientMapper {
             name: auth.name,
             createdAt: auth.createdAt,
             clientId: auth.clientId,
+            loginLink: auth.loginLink,
+            regLink: auth.regLink,
         };
     }
 
@@ -24,6 +26,8 @@ class ClientMapper {
             clientId: auth.clientId,
             createdAt: auth.clientId,
             updatedAt: auth.updatedAt,
+            loginLink: auth.loginLink,
+            regLink: auth.regLink,
         };
     }
 }

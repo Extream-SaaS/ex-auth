@@ -19,6 +19,12 @@ class AuthClient extends Model {
                 name: {
                     type: DataTypes.STRING,
                 },
+                loginLink: {
+                    type: DataTypes.STRING,
+                },
+                regLink: {
+                    type: DataTypes.STRING,
+                },
             },
             {
                 modelName: 'authClient',

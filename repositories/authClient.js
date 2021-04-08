@@ -2,8 +2,7 @@ const AuthClient = require('../db/models/authClient');
 const Token = require('../db/models/token');
 
 class AuthClientRepository {
-    // TODO: Store loginLink and regLink for the auth client
-    static create(secret, name, clientId) {
+    static create(secret, name, clientId, loginLink, regLink) {
         const properties = {
             secret,
             name,
@@ -12,6 +11,8 @@ class AuthClientRepository {
                 'password',
                 'refresh_token'
             ],
+            loginLink,
+            regLink,
         };
         return AuthClient.create(properties);
     }

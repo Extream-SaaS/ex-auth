@@ -42,7 +42,7 @@ class ClientController {
 
             console.log(typeof secret, secret);
 
-            const newAuthClient = await this.authClientRepository.create(secret, req.body.auth_name, req.body.client_id);
+            const newAuthClient = await this.authClientRepository.create(secret, req.body.auth_name, req.body.client_id, req.body.login_link, req.body.reg_link);
 
             if (!newAuthClient) {
                 return sendResponse(res, {message: 'bad request'}, 400);
