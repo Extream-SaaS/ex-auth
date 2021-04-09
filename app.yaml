@@ -1,9 +1,5 @@
 service: ex-auth
 runtime: nodejs
-env: flex
-
-beta_settings:
-  cloud_sql_instances: "stoked-reality-284921:europe-west2:extream"
 
 env_variables:
   CLOUD_SQL_USERNAME: $CLOUD_SQL_USERNAME
