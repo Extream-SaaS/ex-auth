@@ -25,6 +25,9 @@ class AuthClient extends Model {
                 regLink: {
                     type: DataTypes.STRING,
                 },
+                senderEmail: {
+                    type: DataTypes.STRING,
+                }
             },
             {
                 modelName: 'authClient',

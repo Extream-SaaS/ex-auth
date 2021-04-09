@@ -2,7 +2,7 @@ const AuthClient = require('../db/models/authClient');
 const Token = require('../db/models/token');
 
 class AuthClientRepository {
-    static create(secret, name, clientId, loginLink, regLink) {
+    static create(secret, name, clientId, loginLink, regLink, senderEmail) {
         const properties = {
             secret,
             name,
@@ -13,6 +13,7 @@ class AuthClientRepository {
             ],
             loginLink,
             regLink,
+            senderEmail,
         };
         return AuthClient.create(properties);
     }

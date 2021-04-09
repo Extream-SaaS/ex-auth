@@ -48,17 +48,17 @@ class EmailService {
         return this.send(to, templateId, templateData);
     }
 
-    async sendInviteeSignUp(to, userPublicId, itemName, regLink) {
+    async sendInviteeSignUp(to, userPublicId, itemName, regLink, from = this.from) {
         const link = `${regLink}${userPublicId}`;
         const templateId = process.env.SENDGRID_INVITEE_TEMPLATE_ID;
         const templateData = {
             itemName,
             link,
         };
-        return this.send(to, templateId, templateData);
+        return this.send(to, templateId, templateData, null, null, null, from);
     }
 
-    async sendPasswordlessLoginLink(to, username, firstName, lastName, password, itemName, loginLink) {
+    async sendPasswordlessLoginLink(to, username, firstName, lastName, password, itemName, loginLink, from = this.from) {
         let greeting = 'Hi';
         if (firstName) {
             greeting = `${greeting} ${firstName}`;
@@ -78,4 +78,4 @@ class EmailService {
 
 }
 
-module.exports = new EmailService(process.env.EXTREAM_FROM_ADDESS);
+module.exports = new EmailService(process.env.EXTREAM_FROM_ADDRESS);

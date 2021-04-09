@@ -55,7 +55,7 @@ class UserController {
                 return sendResponse(res, {message: 'bad request'}, 400);
             }
             if (typeof req.body.notify === 'undefined' || req.body.notify !== 'false') {
-                await emailService.sendInviteeSignUp(newUser.email, newUser.public_id, req.authClient.name, req.authClient.regLink);
+                await emailService.sendInviteeSignUp(newUser.email, newUser.public_id, req.authClient.name, req.authClient.regLink, req.authClient.senderEmail);
             }
             return sendResponse(res, UserMapper.toResponse(newUser));
         } catch (e) {

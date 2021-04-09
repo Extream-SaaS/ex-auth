@@ -17,6 +17,7 @@ class ClientMapper {
             clientId: auth.clientId,
             loginLink: auth.loginLink,
             regLink: auth.regLink,
+            senderEmail: auth.senderEmail,
         };
     }
 
@@ -28,6 +29,7 @@ class ClientMapper {
             updatedAt: auth.updatedAt,
             loginLink: auth.loginLink,
             regLink: auth.regLink,
+            senderEmail: auth.senderEmail,
         };
     }
 }
